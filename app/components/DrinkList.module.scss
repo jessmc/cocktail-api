@@ -1,0 +1,14 @@
+/* app/components/DrinkList.module.scss */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.empty {
+  margin-top: 1rem;
+  font-style: italic;
+  color: #6b7280;
+}
