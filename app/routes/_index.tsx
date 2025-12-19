@@ -22,10 +22,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
       drinks: null,
       query: "",
       type,
+      total: 0,
+      page: 1,
     } satisfies {
       drinks: SearchResponse["drinks"];
       query: string;
       type: "name" | "ingredient";
+      total: number;
+      page: number;
     };
   }
 
@@ -34,21 +38,48 @@ export async function loader({ request }: LoaderFunctionArgs) {
       ? await searchByIngredient(query)
       : await searchByName(query);
 
+  // pagination
+  const PAGE_SIZE = 10;
+  const pageParam = Number(url.searchParams.get("page") ?? "1");
+  const page = Number.isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
+
+  const rawDrinks = data.drinks;
+
+  // normalize
+  const allDrinks = Array.isArray(rawDrinks) ? rawDrinks : [];
+
+  const total = allDrinks.length;
+
+  const totalPages = Math.ceil(total / PAGE_SIZE);
+
+  const safePage =
+    totalPages === 0 ? 1 : Math.min(page, totalPages);
+
+  const start = (safePage - 1) * PAGE_SIZE;
+  const paginatedDrinks = allDrinks.slice(start, start + PAGE_SIZE);
+
+
   return {
-    drinks: data.drinks ?? [],
+    drinks: paginatedDrinks,
     query,
     type,
+    total,
+    page: safePage,
   } satisfies {
     drinks: SearchResponse["drinks"];
     query: string;
     type: "name" | "ingredient";
+    total: number;
+    page: number;
   };
 }
 
 export default function Index() {
 
-  const { drinks, query, type } = useLoaderData() as {
-    drinks: SearchResponse['drinks'];
+  const { drinks, total, page, query, type } = useLoaderData() as {
+    drinks: SearchResponse["drinks"];
+    total: number;
+    page: number;
     query: string;
     type: "name" | "ingredient";
   };
@@ -65,6 +96,14 @@ export default function Index() {
 
   const isNameSearch = type === "name";
   const isIngredientSearch = type === "ingredient";
+
+  const totalPages = Math.ceil(total / 12);
+
+  function goToPage(nextPage: number) {
+    navigate(
+      `/?q=${encodeURIComponent(query)}&type=${type}&page=${nextPage}`
+    );
+  }
 
   return (
     <div>
@@ -86,6 +125,25 @@ export default function Index() {
       </div>
 
       <DrinkList drinks={drinks}/>
+
+      {totalPages > 1 && (
+        <div>
+          <button disabled={page <= 1} onClick={() => goToPage(page - 1)}>
+            Previous
+          </button>
+
+          <span>
+            Page {page} of {totalPages}
+          </span>
+
+          <button
+            disabled={page >= totalPages}
+            onClick={() => goToPage(page + 1)}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }
