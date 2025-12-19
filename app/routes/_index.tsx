@@ -35,7 +35,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       : await searchByName(query);
 
   return {
-    drinks: data.drinks,
+    drinks: data.drinks ?? [],
     query,
     type,
   } satisfies {
@@ -63,6 +63,9 @@ export default function Index() {
     navigate(`/?q=${encodeURIComponent(value)}&type=ingredient`);
   }
 
+  const isNameSearch = type === "name";
+  const isIngredientSearch = type === "ingredient";
+
   return (
     <div>
       <h1>Cocktail Search</h1>
@@ -70,12 +73,14 @@ export default function Index() {
         <SearchForm
           label="Search drinks by name"
           placeholder="Margarita"
+          value={isNameSearch ? query : ""}
           onSearch={searchByName}
         />
 
         <SearchForm
           label="Search drinks by ingredient"
           placeholder="Gin"
+          value={isIngredientSearch ? query : ""}
           onSearch={searchByIngredient}
         />
       </div>

@@ -8,12 +8,8 @@ interface DrinkListProps {
 }
 
 export default function DrinkList({drinks}: DrinkListProps) {
-    if (!drinks) {
-        return <p className={styles.empty}>Start searching for drinks!</p>;
-    }
-
-    if (drinks.length === 0) {
-        return <p className={styles.empty}>No drinks found.</p>;
+    if (!Array.isArray(drinks) || drinks.length === 0) {
+        return <p>No drinks found.</p>;
     }
 
     return (

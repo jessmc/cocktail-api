@@ -23,20 +23,23 @@ export interface DrinkDetailsResponse {
 
 const BASE_URL = "https://www.thecocktaildb.com/api/json/v1/1";
 
-export async function searchByName(name: string): Promise<SearchResponse> {
-    const res = await fetch(`${BASE_URL}/search.php?s=${name}`);
-    if (!res.ok) throw new Error('Failed to fetch cocktails by name.');
-    return res.json();
+export async function searchByName(
+  query: string
+): Promise<SearchResponse> {
+  const res = await fetch(`${BASE_URL}/search.php?s=${query}`);
+  return res.json();
 }
 
-export async function searchByIngredient(ingredient: string): Promise<SearchResponse> {
-    const res = await fetch(`${BASE_URL}/filter.php?i=${ingredient}`);
-    if (!res.ok) throw new Error('Failed to fetch ingredient');
-    return res.json();
+export async function searchByIngredient(
+  query: string
+): Promise<SearchResponse> {
+  const res = await fetch(`${BASE_URL}/filter.php?i=${query}`);
+  return res.json();
 }
 
-export async function getDrinkById(id: string): Promise<DrinkDetailsResponse> {
-    const res = await fetch(`${BASE_URL}/lookup.php?i=${id}`);
-    if (!res.ok) throw new Error('Failed to fetch drink details');
-    return res.json();
-}
+// ** not using at the moment
+// export async function getDrinkById(id: string): Promise<DrinkDetailsResponse> {
+//     const res = await fetch(`${BASE_URL}/lookup.php?i=${id}`);
+//     if (!res.ok) throw new Error('Failed to fetch drink details');
+//     return res.json();
+// }
