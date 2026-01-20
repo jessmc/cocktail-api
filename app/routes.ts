@@ -7,7 +7,7 @@ export default [
 
   route("search/ingredient", "routes/search.ingredient.jsx"),
 
-  route("drink/:id", "routes/drink.$id.jsx"),
+  route("drink/:id", "routes/drink/$id.tsx"),
 
   route("test/api", "routes/test.api.jsx"),
 

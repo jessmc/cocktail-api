@@ -22,3 +22,18 @@ body {
     color: #f9fafb;
   }
 }
+
+// h1 {
+//   margin: 50px 100px;
+// }
+
+.pagination {
+  margin: 100px auto;
+  width: 1100px;
+  display: flex;
+  justify-content: center;
+
+  span {
+    margin: 0 50px;
+  }
+}

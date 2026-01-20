@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import type { DrinkSummary } from "~/api/cocktailApi";
 import styles from "./DrinkCard.module.scss";
 
@@ -8,9 +8,14 @@ interface DrinkCardProps {
 }
 
 export default function DrinkCard({drink}: DrinkCardProps) {
+    const location = useLocation();
+
     return (
         <article className={styles.card}>
-            <Link to={`/drink/${drink.idDrink}`}>
+            <Link
+                to={`/drink/${drink.idDrink}${location.search}`}
+                className={styles.card}
+      >
                 <img 
                 src={drink.strDrinkThumb}
                 alt={drink.strDrink}

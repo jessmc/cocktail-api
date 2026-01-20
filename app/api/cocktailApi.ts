@@ -37,9 +37,21 @@ export async function searchByIngredient(
   return res.json();
 }
 
-// ** not using at the moment
-// export async function getDrinkById(id: string): Promise<DrinkDetailsResponse> {
-//     const res = await fetch(`${BASE_URL}/lookup.php?i=${id}`);
-//     if (!res.ok) throw new Error('Failed to fetch drink details');
-//     return res.json();
-// }
+export async function getDrinkById(id: string): Promise<DrinkDetails> {
+  const res = await fetch(
+    `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`
+  );
+  const data = await res.json();
+
+  const drink = data.drinks?.[0];
+
+  if (!drink) throw new Error("Drink not found");
+
+  return {
+    ...drink,
+    strInstructions: drink.strInstructions ?? null,
+    strCategory: drink.strCategory ?? null,
+    strAlcoholic: drink.strAlcoholic ?? null,
+    idDrink: drink.idDrink ?? "",
+  } satisfies DrinkDetails;
+}

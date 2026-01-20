@@ -108,7 +108,7 @@ export default function Index() {
   return (
     <div>
       <h1>Cocktail Search</h1>
-      <div style={{ display: "flex", gap: "1rem" }}>
+      <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
         <SearchForm
           label="Search drinks by name"
           placeholder="Margarita"
@@ -127,7 +127,7 @@ export default function Index() {
       <DrinkList drinks={drinks}/>
 
       {totalPages > 1 && (
-        <div>
+        <div className="pagination">
           <button disabled={page <= 1} onClick={() => goToPage(page - 1)}>
             Previous
           </button>
