@@ -3,14 +3,22 @@
 :root {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-love: "Lovers Quarrel", cursive;
+  --font-bask: "Libre Baskerville", serif;
   --bg-light: #ffffff;
   --bg-dark: #030712;
+  --sky: #87BCDE;
+  --dusty: #805E73;
+  --gray: #4E4D5C;
+  --blue: #2D4654;
+  --dark-blue: #243B4A;
 }
 
 html,
 body {
-  font-family: var(--font-sans);
-  background-color: var(--bg-light);
+  font-family: var(--font-bask);
+  background-color: var(--dark-blue);
+  color: #fff;
   margin: 0;
   padding: 0;
 }
@@ -23,9 +31,13 @@ body {
   }
 }
 
-// h1 {
-//   margin: 50px 100px;
-// }
+
+h1.title {
+  font-family: var(--font-love);
+  font-size: 8em;
+  text-align: center;
+  margin: 25px 0px;
+}
 
 .pagination {
   margin: 100px auto;
@@ -36,4 +48,15 @@ body {
   span {
     margin: 0 50px;
   }
+}
+
+a {
+  color: var(--dusty);
+  text-decoration: none;
+}
+
+button {
+  background-color: var(--gray);
+  color: #fff;
+  padding: 15px 25px;
 }

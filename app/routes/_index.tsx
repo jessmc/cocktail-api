@@ -2,7 +2,7 @@ import { useLoaderData, useNavigate } from "react-router";
 import type { LoaderFunctionArgs } from "react-router";
 import SearchForm from "~/components/SearchForm";
 import DrinkList from "~/components/DrinkList";
-import { searchByName, searchByIngredient, type SearchResponse } from "~/api/cocktailApi";
+import { searchByName, searchByIngredient, getRandomDrink, type SearchResponse, type DrinkDetails } from "~/api/cocktailApi";
 
 type SearchType = "name" | "ingredient";
 
@@ -18,18 +18,21 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 
   if (!query) {
+    const randomDrink = await getRandomDrink();
     return {
       drinks: null,
       query: "",
       type,
       total: 0,
       page: 1,
+      randomDrink,
     } satisfies {
       drinks: SearchResponse["drinks"];
       query: string;
       type: "name" | "ingredient";
       total: number;
       page: number;
+      randomDrink: DrinkDetails | null;
     };
   }
 
@@ -65,23 +68,26 @@ export async function loader({ request }: LoaderFunctionArgs) {
     type,
     total,
     page: safePage,
+    randomDrink: null,
   } satisfies {
     drinks: SearchResponse["drinks"];
     query: string;
     type: "name" | "ingredient";
     total: number;
     page: number;
+    randomDrink: DrinkDetails | null;
   };
 }
 
 export default function Index() {
 
-  const { drinks, total, page, query, type } = useLoaderData() as {
+  const { drinks, total, page, query, type, randomDrink } = useLoaderData() as {
     drinks: SearchResponse["drinks"];
     total: number;
     page: number;
     query: string;
     type: "name" | "ingredient";
+    randomDrink: DrinkDetails | null;
   };
 
   const navigate = useNavigate();
@@ -107,7 +113,7 @@ export default function Index() {
 
   return (
     <div>
-      <h1>Cocktail Search</h1>
+      <h1 className="title">Bottom's Up</h1>
       <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
         <SearchForm
           label="Search drinks by name"
@@ -124,7 +130,7 @@ export default function Index() {
         />
       </div>
 
-      <DrinkList drinks={drinks}/>
+      <DrinkList drinks={drinks} randomDrink={randomDrink} />
 
       {totalPages > 1 && (
         <div className="pagination">

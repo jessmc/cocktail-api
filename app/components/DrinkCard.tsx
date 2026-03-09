@@ -14,12 +14,10 @@ export default function DrinkCard({drink}: DrinkCardProps) {
         <article className={styles.card}>
             <Link
                 to={`/drink/${drink.idDrink}${location.search}`}
-                className={styles.card}
       >
                 <img 
                 src={drink.strDrinkThumb}
                 alt={drink.strDrink}
-                width={180}
                 loading="lazy"
                 />
                 <h3> {drink.strDrink}</h3>

@@ -55,3 +55,20 @@ export async function getDrinkById(id: string): Promise<DrinkDetails> {
     idDrink: drink.idDrink ?? "",
   } satisfies DrinkDetails;
 }
+
+export async function getRandomDrink(): Promise<DrinkDetails> {
+  const res = await fetch(`${BASE_URL}/random.php`);
+  const data: DrinkDetailsResponse = await res.json();
+
+  const drink = data.drinks?.[0];
+  if (!drink) throw new Error("No random drink returned");
+
+  return {
+    ...drink,
+    strInstructions: drink.strInstructions ?? null,
+    strCategory: drink.strCategory ?? null,
+    strAlcoholic: drink.strAlcoholic ?? null,
+    idDrink: drink.idDrink ?? "",
+  } satisfies DrinkDetails;
+
+}
