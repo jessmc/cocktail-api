@@ -94,7 +94,8 @@ export default function Index() {
 
   return (
     <div className={styles.page}>
-      <h1 className="title">Bottom's Up</h1>
+      <h1 className="title">The Thirsty Endpoint</h1>
+      <p className={styles.description}>Search for a drink by Name or Ingredient. Or <a href="/">click here</a> to see a random drink.</p>
 
       <SearchForm
         onSearch={handleSearch}
@@ -128,6 +129,8 @@ export default function Index() {
           </button>
         </div>
       )}
+
+      <p className={styles.description}>✦ Big thanks to <a href="https://www.thecocktaildb.com/">The Cocktail DB</a> ✦</p>
     </div>
   );
 }

@@ -49,7 +49,7 @@ export default function DrinkPage() {
     return (
     <div className={styles.page}>
         <a href="/">
-            <h1 className="site-title">Bottom's Up</h1>
+            <h1 className="site-title">The Thirsty Endpoint</h1>
         </a>
 
         <Link to={backTo} className={styles.back}>
@@ -92,6 +92,8 @@ export default function DrinkPage() {
                 )}
             </div>
         </div>
+
+        <p className={styles.description}>✦ Big thanks to <a href="https://www.thecocktaildb.com/">The Cocktail DB</a> ✦</p>
     </div>
 );
 }

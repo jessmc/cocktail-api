@@ -4,6 +4,18 @@
   padding: 2rem;
 }
 
+.description {
+    text-align: center;
+    font-style: italic;
+    margin: 25px 0px;
+
+    a {
+        color: var(--dusty);
+    }
+}
+
+
+
 .pagination {
   display: flex;
   align-items: center;
