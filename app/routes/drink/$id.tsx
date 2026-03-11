@@ -19,76 +19,79 @@ export async function loader({params}: LoaderFunctionArgs) {
     if (!id) throw new Error("No drink ID provided.");
 
     const drink: DrinkDetails = await getDrinkById(id);
+    const ingredients = getIngredients(drink);
 
-    // transform ingredients + measures into an array
-    const ingredients: Ingredient[] = [];
+    return ({
+    ...drink,
+    ingredients
+    } as unknown) as DrinkPageData;
+
+}
+
+function getIngredients(drink: DrinkDetails): { ingredient: string; measure: string | null }[] {
+    const ingredients = [];
     for (let i = 1; i <= 15; i++) {
         const ingredient = drink[`strIngredient${i}`];
         const measure = drink[`strMeasure${i}`];
         if (ingredient) {
-        ingredients.push({ ingredient, measure: measure ?? undefined });
+            ingredients.push({ ingredient, measure: measure ?? null });
         }
     }
-
-    return ({
-    ...drink,
-    ingredients,
-    } as unknown) as DrinkPageData;
-
+    return ingredients;
 }
 
 export default function DrinkPage() {
     const drink = useLoaderData() as DrinkPageData;
     const location = useLocation();
     const backTo = location.search ? `/${location.search}` : "/";
+    
 
     return (
-        <div className={styles.page}>
-
-            <a href="/">
+    <div className={styles.page}>
+        <a href="/">
             <h1 className="site-title">Bottom's Up</h1>
-            </a>
+        </a>
 
-            <Link to={backTo} className={styles.back}>
-                ← Back to search
-            </Link>
+        <Link to={backTo} className={styles.back}>
+            ← Back to search
+        </Link>
 
-            <h2 className={styles.title}>{drink.strDrink}</h2>
+        <div className={styles.feature}>
+            <img
+                src={drink.strDrinkThumb ?? ""}
+                className={styles.image}
+            />
 
-            <div className="flex">
-                <div> 
-                    <img
-                        src={drink.strDrinkThumb ?? ""}
-                        className={styles.image}
-                    />
+            <div className={styles.details}>
+                <div className={styles.meta}>
+                    {drink.strCategory && <span className={styles.tag}>{drink.strCategory}</span>}
+                    {drink.strAlcoholic && <span className={styles.tag}>{drink.strAlcoholic}</span>}
                 </div>
-                <div>
-                    <section className={styles.ingredients}>
-                        <h2>Ingredients</h2>
-                        <ul>
-                        {drink.ingredients.map(({ ingredient, measure }) => (
-                            <li key={ingredient}>
-                            {ingredient} {measure && `- ${measure}`}
-                            </li>
-                        ))}
+
+                <h2 className={styles.title}>{drink.strDrink}</h2>
+
+                {drink.ingredients.length > 0 && (
+                    <div className={styles.ingredients}>
+                        <h4 className={styles.sectionLabel}>Ingredients</h4>
+                        <ul className={styles.ingredientList}>
+                            {drink.ingredients.map(({ ingredient, measure }) => (
+                                <li key={ingredient} className={styles.ingredientItem}>
+                                    <span className={styles.ingredientName}>{ingredient}</span>
+                                    {measure && <span className={styles.measure}>{measure.trim()}</span>}
+                                </li>
+                            ))}
                         </ul>
-                    </section>
+                    </div>
+                )}
 
-                    {drink.strInstructions && (
-                        <section className={styles.instructions}>
-                        <h2>Instructions</h2>
+                {drink.strInstructions && (
+                    <div className={styles.instructions}>
+                        <h4 className={styles.sectionLabel}>Instructions</h4>
                         <p>{drink.strInstructions}</p>
-                        </section>
-                    )}
-
-                    <section className={styles.info}>
-                        {drink.strCategory && <p>Category: {drink.strCategory}</p>}
-                        {drink.strAlcoholic && <p>Type: {drink.strAlcoholic}</p>}
-                    </section>
-                </div>
+                    </div>
+                )}
             </div>
         </div>
-
-        
-    )
+    </div>
+);
 }

@@ -23,6 +23,8 @@ export interface DrinkDetailsResponse {
 
 const BASE_URL = "https://www.thecocktaildb.com/api/json/v1/1";
 
+
+// search drinks by name
 export async function searchByName(
   query: string
 ): Promise<SearchResponse> {
@@ -30,6 +32,7 @@ export async function searchByName(
   return res.json();
 }
 
+// search drinks by ingredient
 export async function searchByIngredient(
   query: string
 ): Promise<SearchResponse> {
@@ -37,9 +40,10 @@ export async function searchByIngredient(
   return res.json();
 }
 
+// the initial search to grab drinks, does not include drink details
 export async function getDrinkById(id: string): Promise<DrinkDetails> {
   const res = await fetch(
-    `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`
+    `${BASE_URL}/lookup.php?i=${id}`
   );
   const data = await res.json();
 
@@ -56,6 +60,7 @@ export async function getDrinkById(id: string): Promise<DrinkDetails> {
   } satisfies DrinkDetails;
 }
 
+// get a random drink for the homepage
 export async function getRandomDrink(): Promise<DrinkDetails> {
   const res = await fetch(`${BASE_URL}/random.php`);
   const data: DrinkDetailsResponse = await res.json();

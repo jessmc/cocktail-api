@@ -1,57 +1,86 @@
 import { useState, type FormEvent, useEffect } from 'react';
 import styles from "./SearchForm.module.scss";
 
+type SearchType = "name" | "ingredient";
 
 interface SearchFormProps {
-  label: string;
-  onSearch: (value: string) => void;
-  placeholder?: string;
+  onSearch: (value: string, type: SearchType) => void;
   isLoading?: boolean;
-  value: string;
+  nameValue: string;
+  ingredientValue: string;
+  activeType: SearchType;
 }
 
 export default function SearchForm({
-    label,
     onSearch,
-    placeholder = "search...",
     isLoading = false,
-    value,
-    }: SearchFormProps) {
-    // Local draft state for typing
-    const [draft, setDraft] = useState(value);
+    nameValue,
+    ingredientValue,
+    activeType,
+}: SearchFormProps) {
+    const [type, setType] = useState<SearchType>(activeType); // this is name or ingredient
+    const [draft, setDraft] = useState(activeType === "name" ? nameValue : ingredientValue); // the temporary keystrokes to be searched on handleSubmit
 
-    // Keep draft in sync when URL value changes (back/forward, reload)
+    // Sync when URL changes (back/forward)
     useEffect(() => {
-        setDraft(value);
-    }, [value]);
+        setType(activeType); // name or ingredient toggle value
+        setDraft(activeType === "name" ? nameValue : ingredientValue); // value of the search input
+    }, [activeType, nameValue, ingredientValue]);
 
+    // change the toggle value
+    function handleToggle(next: SearchType) {
+        setType(next);
+        setDraft(next === "name" ? nameValue : ingredientValue);
+    }
+
+    // submit the search form
     function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        onSearch(draft.trim());
+        onSearch(draft.trim(), type);
     }
 
     return (
         <form className={styles.form} onSubmit={handleSubmit}>
-            <label>
-                <span className="sr-only">{label}</span>
+            <div className={styles.bar}>
+                <div className={styles.toggle}>
+                    {/* name toggle */}
+                    <button
+                        type="button"
+                        className={`${styles.toggleBtn} ${type === "name" ? styles.active : ""}`}
+                        onClick={() => handleToggle("name")}
+                    >
+                        Name
+                    </button>
+                    {/* ingredient toggle */}
+                    <button
+                        type="button"
+                        className={`${styles.toggleBtn} ${type === "ingredient" ? styles.active : ""}`}
+                        onClick={() => handleToggle("ingredient")}
+                    >
+                        Ingredient
+                    </button>
+                </div>
+
+                <div className={styles.divider} />
+
+                {/* input field */}
                 <input
                     type="text"
                     value={draft}
                     onChange={(e) => setDraft(e.target.value)}
-                    placeholder={placeholder}
+                    placeholder={type === "name" ? "Margarita..." : "Gin..."}
                     className={styles.input}
                 />
-            </label>
 
-            <button
-                type="submit"
-                className={styles.button}
-                disabled={isLoading || !draft.trim()}
-            >
-
-                {isLoading ? "Searching…" : "Search"}
-
-            </button>
+                {/* submit button */}
+                <button
+                    type="submit"
+                    className={styles.submit}
+                    disabled={isLoading || !draft.trim()}
+                >
+                    {isLoading ? "…" : "Search"}
+                </button>
+            </div>
         </form>
     );
 }

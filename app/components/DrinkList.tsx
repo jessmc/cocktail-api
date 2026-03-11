@@ -16,10 +16,12 @@ export default function DrinkList({drinks, randomDrink}: DrinkListProps) {
         return <RandomDrinkFeature drink={randomDrink} />;
     }
 
+    // if no drinks found in search
     if (drinks.length === 0) {
         return <p>No drinks found.</p>;
     }
 
+    // return the list of drinks from search results
     return (
         <div className={styles.grid}>
             {drinks.map((drink) => (

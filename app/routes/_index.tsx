@@ -3,6 +3,7 @@ import type { LoaderFunctionArgs } from "react-router";
 import SearchForm from "~/components/SearchForm";
 import DrinkList from "~/components/DrinkList";
 import { searchByName, searchByIngredient, getRandomDrink, type SearchResponse, type DrinkDetails } from "~/api/cocktailApi";
+import styles from "~/components/_index.module.scss";
 
 type SearchType = "name" | "ingredient";
 
@@ -15,7 +16,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     rawType === "ingredient" || rawType === "name"
       ? rawType
       : "name";
-
 
   if (!query) {
     const randomDrink = await getRandomDrink();
@@ -41,26 +41,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
       ? await searchByIngredient(query)
       : await searchByName(query);
 
-  // pagination
   const PAGE_SIZE = 10;
   const pageParam = Number(url.searchParams.get("page") ?? "1");
   const page = Number.isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
 
-  const rawDrinks = data.drinks;
-
-  // normalize
-  const allDrinks = Array.isArray(rawDrinks) ? rawDrinks : [];
-
+  const allDrinks = Array.isArray(data.drinks) ? data.drinks : [];
   const total = allDrinks.length;
-
   const totalPages = Math.ceil(total / PAGE_SIZE);
-
-  const safePage =
-    totalPages === 0 ? 1 : Math.min(page, totalPages);
-
+  const safePage = totalPages === 0 ? 1 : Math.min(page, totalPages);
   const start = (safePage - 1) * PAGE_SIZE;
   const paginatedDrinks = allDrinks.slice(start, start + PAGE_SIZE);
-
 
   return {
     drinks: paginatedDrinks,
@@ -80,7 +70,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Index() {
-
   const { drinks, total, page, query, type, randomDrink } = useLoaderData() as {
     drinks: SearchResponse["drinks"];
     total: number;
@@ -92,61 +81,50 @@ export default function Index() {
 
   const navigate = useNavigate();
 
-  function searchByName(value: string) {
-    navigate(`/?q=${encodeURIComponent(value)}&type=name`);
+  function handleSearch(value: string, searchType: SearchType) {
+    navigate(`/?q=${encodeURIComponent(value)}&type=${searchType}`);
   }
 
-  function searchByIngredient(value: string) {
-    navigate(`/?q=${encodeURIComponent(value)}&type=ingredient`);
-  }
-
-  const isNameSearch = type === "name";
-  const isIngredientSearch = type === "ingredient";
-
-  const totalPages = Math.ceil(total / 12);
+  const PAGE_SIZE = 10;
+  const totalPages = Math.ceil(total / PAGE_SIZE);
 
   function goToPage(nextPage: number) {
-    navigate(
-      `/?q=${encodeURIComponent(query)}&type=${type}&page=${nextPage}`
-    );
+    navigate(`/?q=${encodeURIComponent(query)}&type=${type}&page=${nextPage}`);
   }
 
   return (
-    <div>
+    <div className={styles.page}>
       <h1 className="title">Bottom's Up</h1>
-      <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
-        <SearchForm
-          label="Search drinks by name"
-          placeholder="Margarita"
-          value={isNameSearch ? query : ""}
-          onSearch={searchByName}
-        />
 
-        <SearchForm
-          label="Search drinks by ingredient"
-          placeholder="Gin"
-          value={isIngredientSearch ? query : ""}
-          onSearch={searchByIngredient}
-        />
-      </div>
+      <SearchForm
+        onSearch={handleSearch}
+        nameValue={type === "name" ? query : ""}
+        ingredientValue={type === "ingredient" ? query : ""}
+        activeType={type}
+      />
 
       <DrinkList drinks={drinks} randomDrink={randomDrink} />
 
       {totalPages > 1 && (
-        <div className="pagination">
-          <button disabled={page <= 1} onClick={() => goToPage(page - 1)}>
-            Previous
+        <div className={styles.pagination}>
+          <button
+            className={styles.pageBtn}
+            disabled={page <= 1}
+            onClick={() => goToPage(page - 1)}
+          >
+            ← Prev
           </button>
 
-          <span>
-            Page {page} of {totalPages}
+          <span className={styles.pageInfo}>
+            {page} / {totalPages}
           </span>
 
           <button
+            className={styles.pageBtn}
             disabled={page >= totalPages}
             onClick={() => goToPage(page + 1)}
           >
-            Next
+            Next →
           </button>
         </div>
       )}

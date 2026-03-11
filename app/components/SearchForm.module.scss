@@ -1,24 +1,96 @@
 .form {
   display: flex;
-  gap: 0.5rem;
+  justify-content: center;
+  margin: 0 0 2rem;
+}
+
+.bar {
+  display: flex;
   align-items: center;
-  margin: 1rem 0;
+  background: white;
+  border-radius: 100px;
+  padding: 6px 6px 6px 8px;
+  gap: 0;
+  width: 100%;
+  max-width: 560px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+}
+
+.toggle {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.toggleBtn {
+  background: none;
+  border: none;
+  border-radius: 100px;
+  padding: 8px 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dark-blue);
+  opacity: 0.4;
+  cursor: pointer;
+  transition: opacity 0.15s, background 0.15s;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &.active {
+    background: var(--dark-blue);
+    color: #fff;
+    opacity: 1;
+  }
+}
+
+.divider {
+  width: 1px;
+  height: 22px;
+  background: rgba(0, 0, 0, 0.12);
+  margin: 0 8px;
+  flex-shrink: 0;
 }
 
 .input {
   flex: 1;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+  border: none;
+  outline: none;
   font-size: 0.95rem;
+  font-family: var(--font-bask);
+  color: var(--dark-blue);
+  background: transparent;
+  padding: 8px 4px;
+  min-width: 0;
 
-  &:focus {
-    outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 1px #2563eb;
+  &::placeholder {
+    color: #aaa;
   }
 }
 
-.button {
-  padding: 0.5rem 0
+.submit {
+  flex-shrink: 0;
+  background: var(--dusty);
+  color: #fff;
+  border: none;
+  border-radius: 100px;
+  padding: 10px 22px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.15s;
+
+  &:hover:not(:disabled) {
+    opacity: 0.85;
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
 }
