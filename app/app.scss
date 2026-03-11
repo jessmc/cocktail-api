@@ -82,3 +82,12 @@ h1.title {
   color: rgba(255, 255, 255, 0.5);
   padding: 0 12px;
 }
+
+.page-fade {
+  animation: pageFadeIn 0.25s ease-out both;
+}
+
+@keyframes pageFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}

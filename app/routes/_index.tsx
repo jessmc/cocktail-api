@@ -93,7 +93,7 @@ export default function Index() {
   }
 
   return (
-    <div className={styles.page}>
+    <div className={`${styles.page} page-fade`}>
       <h1 className="title">The Thirsty Endpoint</h1>
       <p className={styles.description}>Search for a drink by Name or Ingredient. Or <a href="/">click here</a> to see a random drink.</p>
 
@@ -104,7 +104,7 @@ export default function Index() {
         activeType={type}
       />
 
-      <DrinkList drinks={drinks} randomDrink={randomDrink} />
+      <DrinkList drinks={drinks} randomDrink={randomDrink} searchKey={`${query}-${type}-${page}`} />
 
       {totalPages > 1 && (
         <div className={styles.pagination}>

@@ -47,7 +47,7 @@ export default function DrinkPage() {
     
 
     return (
-    <div className={styles.page}>
+    <div className={`${styles.page} page-fade`}>
         <a href="/">
             <h1 className="site-title">The Thirsty Endpoint</h1>
         </a>

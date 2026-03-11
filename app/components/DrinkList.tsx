@@ -7,9 +7,10 @@ import styles from "./DrinkList.module.scss";
 interface DrinkListProps {
     drinks: DrinkSummary[] | null;
     randomDrink?: DrinkDetails | null;
+    searchKey?: string;
 }
 
-export default function DrinkList({drinks, randomDrink}: DrinkListProps) {
+export default function DrinkList({drinks, randomDrink, searchKey}: DrinkListProps) {
     // no search yet -- show the random drink
     if (drinks === null) {
         if (!randomDrink) return <p>Loading...</p>;
@@ -23,9 +24,9 @@ export default function DrinkList({drinks, randomDrink}: DrinkListProps) {
 
     // return the list of drinks from search results
     return (
-        <div className={styles.grid}>
-            {drinks.map((drink) => (
-                <DrinkCard key={drink.idDrink} drink={drink} />
+        <div className={styles.grid} key={searchKey}>
+            {drinks.map((drink, i) => (
+                <DrinkCard key={drink.idDrink} drink={drink} index={i} />
             ))}
         </div>
     )
