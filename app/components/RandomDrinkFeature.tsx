@@ -50,10 +50,6 @@ export default function RandomDrinkFeature({ drink }: RandomDrinkFeatureProps) {
                         <h2 className={styles.name}>{drink.strDrink}</h2>
                     </Link>
 
-                    {drink.strInstructions && (
-                        <p className={styles.instructions}>{drink.strInstructions}</p>
-                    )}
-
                     {ingredients.length > 0 && (
                         <div className={styles.ingredients}>
                             <h4 className={styles.ingredientsTitle}>Ingredients</h4>
@@ -67,6 +63,12 @@ export default function RandomDrinkFeature({ drink }: RandomDrinkFeatureProps) {
                             </ul>
                         </div>
                     )}
+
+                    {drink.strInstructions && (
+                        <p className={styles.instructions}>{drink.strInstructions}</p>
+                    )}
+
+                    
                 </div>
             </div>
         </div>

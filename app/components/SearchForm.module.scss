@@ -18,33 +18,48 @@
 
 .toggle {
   display: flex;
-  gap: 2px;
-  flex-shrink: 0;
+  position: relative;
+  background: rgba(0, 0, 0, 0.07);
+  border-radius: 100px;
+  padding: 3px;
+  gap: 0;
 }
 
 .toggleBtn {
+  position: relative;
+  z-index: 1;
   background: none;
   border: none;
   border-radius: 100px;
-  padding: 8px 14px;
+  padding: 7px 14px;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--dark-blue);
-  opacity: 0.4;
+  opacity: 0.5;
   cursor: pointer;
-  transition: opacity 0.15s, background 0.15s;
+  transition: opacity 0.2s, color 0.2s;
 
   &:hover {
-    opacity: 0.7;
+    opacity: 0.8;
   }
 
   &.active {
-    background: var(--dark-blue);
-    color: #fff;
     opacity: 1;
+    color: #fff;
   }
+}
+
+.toggleSlider {
+  position: absolute;
+  top: 3px;
+  left: 0px;
+  height: calc(100% - 6px);
+  border-radius: 100px;
+  background: var(--dark-blue);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.22s ease;
+  pointer-events: none;
 }
 
 .divider {
